@@ -1,0 +1,12 @@
+{
+  "name": "yves90day-shift",
+  "version": "1.0.0",
+  "description": "90 Day Shift - Coaching Program Landing Page & Backend",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "npm install"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

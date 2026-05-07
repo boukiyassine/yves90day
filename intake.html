@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>90 Day Shift — Client Intake Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #080808;
+      --white: #f2ede6;
+      --red: #FF3B5C;
+      --gray: #1a1a1a;
+      --muted: #888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    header h1 span {
+      color: var(--red);
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 32px;
+      justify-content: center;
+    }
+
+    .progress-step {
+      width: 30px;
+      height: 4px;
+      background: var(--gray);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .progress-step.active {
+      background: var(--red);
+      width: 60px;
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .form-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      border: 1px solid var(--gray);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      border-radius: 2px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--red);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+      justify-content: space-between;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: transparent;
+      border: 1px solid var(--muted);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .btn-primary {
+      background: var(--red);
+      border-color: var(--red);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      background: #cc2244;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--gray);
+      border-radius: 4px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 16px;
+    }
+
+    .upload-area:hover {
+      border-color: var(--red);
+      background: rgba(255, 59, 92, 0.05);
+    }
+
+    .upload-area p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .success-screen.show {
+      display: block;
+    }
+
+    .success-screen h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .success-screen p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .next-steps {
+      background: #111;
+      border: 1px solid var(--gray);
+      padding: 24px;
+      border-radius: 4px;
+      text-align: left;
+      margin-top: 32px;
+    }
+
+    .next-steps h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    .next-steps ol {
+      margin-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .next-steps li {
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>90 Day <span>SHIFT</span></h1>
+    <p>Complete Your Intake Form</p>
+  </header>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- FORM CONTAINER -->
+  <form id="intakeForm">
+    <!-- SECTION 1: BASIC INFO -->
+    <div class="form-section active" id="section-1">
+      <h2>Basic Information</h2>
+      
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" readonly id="name-field">
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp Number</label>
+        <input type="text" name="whatsapp" readonly id="whatsapp-field">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" readonly id="email-field">
+      </div>
+
+      <div class="form-group">
+        <label>Plan Selected *</label>
+        <select name="plan" required>
+          <option value="">Select your plan</option>
+          <option value="1-month">1 Month - 90 DT</option>
+          <option value="2-month">2 Months - 125 DT</option>
+          <option value="3-month">3 Months - 190 DT</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" disabled style="opacity:0.5;">← Back</button>
+        <button type="button" class="btn-primary" onclick="nextSection(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: PHYSIQUE & GOAL -->
+    <div class="form-section" id="section-2">
+      <h2>Your Physique & Goal</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Age *</label>
+          <input type="number" name="age" required min="16" max="100">
+        </div>
+        <div class="form-group">
+          <label>Current Weight (kg) *</label>
+          <input type="number" name="weight_kg" required step="0.1">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Height (cm) *</label>
+          <input type="number" name="height_cm" required>
+        </div>
+        <div class="form-group">
+          <label>Main Goal *</label>
+          <select name="goal" required>
+            <option value="">Select</option>
+            <option value="Build muscle">Build Muscle</option>
+            <option value="Lose fat">Lose Fat</option>
+            <option value="Recomposition">Recomposition</option>
+            <option value="Strength">Strength</option>
+            <option value="Athletic Performance">Athletic Performance</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>How would you describe your current physique? *</label>
+        <textarea name="physique_description" required placeholder="e.g., Skinny fat, lean, overweight, athletic but weak..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" onclick="prevSection(1)">← Back</button>
+        <button type="button" class="btn-primary" onclick="nextSection(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: TRAINING -->
+    <div class="form-section" id="section-3">
+      <h2>Your Training</h2>
+
+      <div class="form-group">
+        <label>Training Experience *</label>
+        <select name="training_experience" required>
+          <option value="">Select</option>
+          <option value="Beginner (0-1 year)">Beginner (0-1 year)</option>
+          <option value="Intermediate (1-3 years)">Intermediate (1-3 years)</option>
+          <option value="Advanced (3+ years)">Advanced (3+ years)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Current Workout Split</label>
+        <input type="text" name="current_workout_split" placeholder="e.g., PPL, Upper/Lower, Bro Split...">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Training Days Per Week *</label>
+          <select name="training_days_per_week" required>
+            <option value="">Select</option>
+            <option value="3">3 days</option>
+            <option value="4">4 days</option>
+            <option value="5">5 days</option>
+            <option value="6">6 days</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preferred Training Time *</label>
+          <select name="preferred_training_time" required>
+            <option value="">Select</option>
+            <option value="Morning (5-8am)">Morning (5-8am)</option>
+            <option value="Afternoon (12-3pm)">Afternoon (12-3pm)</option>
+            <option value="Evening (5-8pm)">Evening (5-8pm)</option>
+            <option value="Night (8pm+)">Night (8pm+)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Injuries or Physical Limitations</label>
+        <textarea name="injuries" placeholder="Any injuries, pain, or movement limitations?"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" onclick="prevSection(2)">← Back</button>
+        <button type="button" class="btn-primary" onclick="nextSection(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: NUTRITION -->
+    <div class="form-section" id="section-4">
+      <h2>Your Nutrition</h2>
+
+      <div class="form-group">
+        <label>How would you describe your current diet? *</label>
+        <textarea name="diet_description" required placeholder="e.g., High carb, lots of junk food, clean eating, inconsistent..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Food Allergies or Restrictions</label>
+        <input type="text" name="food_allergies" placeholder="e.g., Lactose intolerant, vegan, halal...">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Meals Per Day *</label>
+          <select name="meals_per_day" required>
+            <option value="">Select</option>
+            <option value="2">2 meals</option>
+            <option value="3">3 meals</option>
+            <option value="4">4 meals</option>
+            <option value="5">5+ meals</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sleep Hours Per Night *</label>
+          <input type="number" name="sleep_hours" required step="0.5" min="4" max="12">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Current Supplements</label>
+        <input type="text" name="current_supplements" placeholder="e.g., Whey protein, creatine, multivitamin...">
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" onclick="prevSection(3)">← Back</button>
+        <button type="button" class="btn-primary" onclick="nextSection(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: PHOTOS & FINAL -->
+    <div class="form-section" id="section-5">
+      <h2>Starting Photos & Stress Level</h2>
+
+      <div class="form-group">
+        <label>Stress Level *</label>
+        <select name="stress_level" required>
+          <option value="">Select</option>
+          <option value="Low">Low - Very relaxed</option>
+          <option value="Medium">Medium - Some stress</option>
+          <option value="High">High - Very stressed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Starting Photo (Front View)</label>
+        <div class="upload-area" onclick="document.getElementById('photo-front').click()">
+          <p id="photo-front-text">Click or drag to upload</p>
+          <input type="file" id="photo-front" name="photo_front" accept="image/*" style="display:none;" onchange="handlePhotoUpload(this, 'front')">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Anything else I should know?</label>
+        <textarea name="additional_notes" placeholder="Any final notes, goals, or concerns..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" onclick="prevSection(4)">← Back</button>
+        <button type="submit" class="btn-primary" id="submit-btn">COMPLETE INTAKE</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <h2>Welcome to the Shift!</h2>
+    <p>Your intake form is complete.</p>
+    <p style="color:var(--white);font-size:14px;margin-top:20px;">Yves will generate your personalized plan within 24 hours.</p>
+
+    <div class="next-steps">
+      <h3>What Happens Next:</h3>
+      <ol>
+        <li><strong>24-48 hours:</strong> You'll receive your complete diet + workout plan via WhatsApp</li>
+        <li><strong>Day 1:</strong> Kickoff call with Yves to review your plan and answer questions</li>
+        <li><strong>Daily:</strong> DM support available anytime</li>
+        <li><strong>Weekly:</strong> Check-ins to track progress and adjust as needed</li>
+        <li><strong>90 days:</strong> Full transformation complete</li>
+      </ol>
+    </div>
+
+    <p style="margin-top:32px;color:var(--muted);font-size:12px;">
+      📱 Check your WhatsApp for messages from Yves<br>
+      Your journey starts now.
+    </p>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_KEY = 'YOUR_SUPABASE_KEY';
+
+  let currentSection = 1;
+  const totalSections = 5;
+
+  // Get client ID from URL
+  const clientId = new URLSearchParams(window.location.search).get('client');
+
+  if (!clientId) {
+    alert('Invalid link. Please use the link provided after payment.');
+    window.location.href = '/';
+  }
+
+  function updateProgressBar() {
+    const progressBar = document.getElementById('progressBar');
+    progressBar.innerHTML = '';
+    for (let i = 1; i <= totalSections; i++) {
+      const step = document.createElement('div');
+      step.className = `progress-step ${i === currentSection ? 'active' : ''}`;
+      progressBar.appendChild(step);
+    }
+  }
+
+  function showSection(n) {
+    const sections = document.querySelectorAll('.form-section');
+    sections.forEach(s => s.classList.remove('active'));
+    document.getElementById(`section-${n}`).classList.add('active');
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nextSection(n) {
+    currentSection = n;
+    showSection(n);
+  }
+
+  function prevSection(n) {
+    currentSection = n;
+    showSection(n);
+  }
+
+  function handlePhotoUpload(input, type) {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById(`photo-${type}-text`).textContent = '✓ ' + file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async function submitForm(e) {
+    e.preventDefault();
+
+    const formData = new FormData(document.getElementById('intakeForm'));
+    const data = {
+      clientId: clientId,
+      name: formData.get('name'),
+      whatsapp: formData.get('whatsapp'),
+      email: formData.get('email'),
+      plan: formData.get('plan'),
+      age: parseInt(formData.get('age')),
+      weight_kg: parseFloat(formData.get('weight_kg')),
+      height_cm: parseInt(formData.get('height_cm')),
+      goal: formData.get('goal'),
+      physique_description: formData.get('physique_description'),
+      training_experience: formData.get('training_experience'),
+      current_workout_split: formData.get('current_workout_split'),
+      training_days_per_week: parseInt(formData.get('training_days_per_week')),
+      preferred_training_time: formData.get('preferred_training_time'),
+      injuries: formData.get('injuries'),
+      diet_description: formData.get('diet_description'),
+      food_allergies: formData.get('food_allergies'),
+      meals_per_day: parseInt(formData.get('meals_per_day')),
+      current_supplements: formData.get('current_supplements'),
+      sleep_hours: parseFloat(formData.get('sleep_hours')),
+      stress_level: formData.get('stress_level'),
+      additional_notes: formData.get('additional_notes'),
+      submitted_at: new Date().toISOString()
+    };
+
+    try {
+      document.getElementById('submit-btn').disabled = true;
+      document.getElementById('submit-btn').textContent = 'SUBMITTING...';
+
+      // Call API to save intake data
+      const response = await fetch('/api/submit-intake', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        document.getElementById('intakeForm').style.display = 'none';
+        document.getElementById('successScreen').classList.add('show');
+      } else {
+        alert('Error submitting form. Please try again.');
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('submit-btn').textContent = 'COMPLETE INTAKE';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error submitting form.');
+      document.getElementById('submit-btn').disabled = false;
+      document.getElementById('submit-btn').textContent = 'COMPLETE INTAKE';
+    }
+  }
+
+  // Auto-fill from lead data if available
+  async function loadLeadData() {
+    // Call /api/get-lead?clientId to fetch pre-filled data
+    try {
+      const response = await fetch(`/api/get-lead?clientId=${clientId}`);
+      const lead = await response.json();
+      
+      if (lead.name) document.getElementById('name-field').value = lead.name;
+      if (lead.whatsapp) document.getElementById('whatsapp-field').value = lead.whatsapp;
+      if (lead.email) document.getElementById('email-field').value = lead.email;
+      document.querySelector('select[name="plan"]').value = lead.plan || '';
+    } catch (e) {
+      console.log('Could not pre-fill form');
+    }
+  }
+
+  document.getElementById('intakeForm').addEventListener('submit', submitForm);
+  updateProgressBar();
+  loadLeadData();
+</script>
+
+</body>
+</html>
